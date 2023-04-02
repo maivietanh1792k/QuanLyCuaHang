@@ -18,6 +18,7 @@ import {
 } from '@react-navigation/drawer';
 
 import { verticalScale } from '../components/Scales';
+import TextBase from '../components/TextBase';
 import { images } from '../constants/images';
 import NavigationService from './NavigationService';
 import { routes } from './Routes';
@@ -38,10 +39,12 @@ const CustomSidebarMenu = () => {
                     />
                     <Text style={styles.userText}>Admin</Text>
                 </View>
-                <Text style={styles.userName}>Nguyen Van A</Text>
+                <TextBase style={styles.userName}>Nguyen Van A</TextBase>
             </LinearGradient>
             {/* </View> */}
-            <DrawerContentScrollView >
+            <DrawerContentScrollView style={{
+                marginTop: verticalScale(16)
+            }}>
                 <DrawerItem
                     label="Dashboard"
                     onPress={() => NavigationService.navigate(routes.HOME_SCREEN)}
@@ -56,6 +59,12 @@ const CustomSidebarMenu = () => {
                 />
                 <DrawerItem
                     label="Bills"
+                    onPress={() => { NavigationService.navigate(routes.BILL_SCREEN) }}
+                    style={styles.dashboard}
+                    labelStyle={styles.lableStyle}
+                />
+                <DrawerItem
+                    label="Customers"
                     onPress={() => { }}
                     style={styles.dashboard}
                     labelStyle={styles.lableStyle}
@@ -76,7 +85,8 @@ const CustomSidebarMenu = () => {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1
+        flex: 1,
+        backgroundColor: '#ECECEC'
     },
     linearGradient: {
         height: verticalScale(200),
@@ -91,14 +101,18 @@ const styles = StyleSheet.create({
         // marginVertical: verticalScale(16),
         fontSize: verticalScale(16),
         alignSelf: 'center',
-        fontWeight: 'bold',
-        color: 'white'
+        // fontWeight: 'bold',
+        color: 'white',
+        fontFamily: 'Pattaya-Regular'
+
     },
     userName: {
         marginHorizontal: verticalScale(16),
         marginBottom: verticalScale(16),
         fontSize: verticalScale(20),
-        color: 'white'
+        color: 'white',
+        fontFamily: 'Pattaya-Regular'
+
     },
     sideMenuProfileIcon: {
         resizeMode: 'stretch',
@@ -119,11 +133,13 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     dashboard: {
-        // borderWidth: 1,
+        borderBottomWidth: 0.3,
+        borderBottomColor: 'white'
     },
     lableStyle: {
         fontSize: verticalScale(18),
-        fontWeight: 'bold'
+        // fontWeight: 'bold',
+        fontFamily: 'Pattaya-Regular'
     }
 });
 

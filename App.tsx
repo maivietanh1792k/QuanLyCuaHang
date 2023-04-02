@@ -13,10 +13,10 @@ import 'react-native-gesture-handler';
 import React from 'react';
 
 import FlashMessage from 'react-native-flash-message';
-import {Provider} from 'react-redux';
+import { Provider } from 'react-redux';
 
 // In App.js in a new project
-import {NavigationContainer} from '@react-navigation/native';
+import { NavigationContainer } from '@react-navigation/native';
 
 import CustomLoading from './src/components/Loading';
 import Popup from './src/components/Popup';
@@ -26,16 +26,14 @@ import AppNavigator from './src/navigation/AppNavigator';
 import {
   isMountedRef,
   navigationRef,
-} from './src/navigation/ScreenStackConfig';
-import {store} from './src/stores';
+} from './src/navigation/NavigationService';
+import { store } from './src/stores';
 
 const reactotron = ReactotronConfig.configure();
 reactotron.clear;
 
 isMountedRef.current = true;
-
 const App = () => {
-
   return (
     <>
       <Provider store={store}>

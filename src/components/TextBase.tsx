@@ -1,14 +1,14 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 
 import {
-  StyleProp,
-  Text,
-  TextProps,
-  TextStyle,
+    StyleProp,
+    Text,
+    TextProps,
+    TextStyle,
 } from 'react-native';
 
-import {colors} from '../constants/colors';
-import {verticalScale} from './Scales';
+import { colors } from '../constants/colors';
+import { verticalScale } from './Scales';
 
 interface Props extends TextProps {
     title?: any,
@@ -33,7 +33,7 @@ class TextBase extends Component<Props, State> {
                     color: colors.textColor,
                     includeFontPadding: false,
                     // letterSpacing: verticalScale(1) / 2,
-                    fontFamily: 'Roboto',
+                    fontFamily: 'Pattaya-Regular',
                 }, this.props.style]}>{this.props.title || ''}{this.props.children}</Text>
         )
     }
