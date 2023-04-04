@@ -1,14 +1,14 @@
 import {
-  CardStyleInterpolators,
-  createStackNavigator,
+    CardStyleInterpolators,
+    createStackNavigator,
 } from '@react-navigation/stack';
 
-import {AuthInitial} from '../entities/ReducersEntities';
-import {User} from '../entities/User';
-import {useAppSelector} from '../stores';
+import { AuthInitial } from '../entities/ReducersEntities';
+import { User } from '../entities/User';
+import { useAppSelector } from '../stores';
 import {
-  AuthStack,
-  MainStackDrawer,
+    AuthStack,
+    MainStackDrawer,
 } from './ScreenStackConfig';
 
 interface Props {
@@ -35,7 +35,7 @@ const AppNavigator = (props: Props) => {
         >
             {
 
-                !auth.loggedIn ? (//&& !loginInfo.isLoading
+                auth.loggedIn ? (//&& !loginInfo.isLoading
                     <Stack.Screen
                         key="mainStack"
                         name="mainStack"

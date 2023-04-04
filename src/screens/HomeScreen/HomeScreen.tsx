@@ -1,28 +1,33 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 import * as React from 'react';
 
 import {
-    Image,
-    SafeAreaView,
-    ScrollView,
-    StyleSheet,
-    TouchableOpacity,
-    View,
+  FlatList,
+  Image,
+  SafeAreaView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 
 import {
-    faFileAlt,
-    faHouse,
-    faMoneyBill,
-    faProcedures,
-    faUserFriends,
+  faFileAlt,
+  faHouse,
+  faMoneyBill,
+  faProcedures,
+  faTruckFast,
+  faUser,
+  faUserFriends,
 } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { useDrawerStatus } from '@react-navigation/drawer';
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import {useDrawerStatus} from '@react-navigation/drawer';
 
-import { verticalScale } from '../../components/Scales';
+import {verticalScale} from '../../components/Scales';
 import TextBase from '../../components/TextBase';
-import { images } from '../../constants/images';
+import {images} from '../../constants/images';
+import {bills} from '../../mockData/bills';
+import {converTimeStamp} from '../../utils/Utils';
 
 interface Props {
     navigation: any
@@ -30,6 +35,7 @@ interface Props {
 const HomeScreen = (props: Props) => {
     const { navigation } = props;
     const isDrawerOpen = useDrawerStatus() === 'open';
+    // const [isRefresh,setIsRefresh] = React.useState(false);
     const onPressMenu = () => {
         if (isDrawerOpen) {
             navigation.closeDrawer();
@@ -76,14 +82,84 @@ const HomeScreen = (props: Props) => {
             </View>
         </>
     }
+    const renderBills = ({item}:{item:any}) => {
+        return (
+            <View style={[styles.billsItem,{backgroundColor: item.expire ? item.paid?'#C8FFA6':'#FFD9D9':styles.billsItem.backgroundColor}]}>
+                <View style={styles.itemLable}>
+                    <FontAwesomeIcon icon={faUser} style={styles.itemLableIcon} color='green'/>
+                    <TextBase title={`${item?.customer?.name} - ${item?.customer?.phoneNumber}`}/>
+                </View>
+                <View style={styles.itemLable}>
+                    <FontAwesomeIcon icon={faTruckFast} style={styles.itemLableIcon} color='green'/>
+                    <TextBase title={`Địa chỉ: ${item?.address}`} />
+                </View>
+                <View style={styles.itemLable}>
+                    <FontAwesomeIcon icon={faTruckFast} style={styles.itemLableIcon} color='green'/>
+                    <TextBase title={'Tổng hoá đơn:  '}>
+                        <TextBase title={item?.totalPrice} style={{ fontSize: verticalScale(20), color: '#EB5500' }} />
+                    </TextBase>
+                </View>
+                <View style={styles.itemLable}>
+                    <FontAwesomeIcon icon={faTruckFast} style={styles.itemLableIcon} color='green'/>
+                    <TextBase title={'Thời gian thuê:  '}>
+                        <TextBase title={converTimeStamp(item?.startDate)} style={{ fontSize: verticalScale(18), color: '#EB5500' }} />
+                        <TextBase title={' - '}/>
+                        <TextBase title={converTimeStamp(item?.endDate)} style={{ fontSize: verticalScale(18), color: '#EB5500' }} />
+                    </TextBase>
+                </View>
+                {item.expire && !item.paid ? <View
+                    style={{
+                        position: 'absolute',
+                        backgroundColor: '#FFBDBD',
+                        alignItems:'center',
+                        justifyContent: 'center',
+                        width:verticalScale(120),
+                        height: 40,
+                        right: -40,
+                        top: 20,
+                        transform:[{rotate:'45deg'}]
+                    }}
+                >
+                    <TextBase title={'Chưa thanh toán'} style={{
+                        fontSize:verticalScale(10),
+                        color:'red'
+                    }} />
+                </View>:null}
+            </View>
+        )
+    }
     const renderBillsToday = () => {
         return <>
-            <TextBase title={'Today Bills'} style={{
-                fontSize: verticalScale(20),
-                margin: verticalScale(16)
-            }} />
-            <ScrollView style={styles.bills}>
-            </ScrollView>
+            <View style={{
+                margin: verticalScale(16),
+                marginTop: 0,
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent:'space-between'
+            }}>
+
+                <TextBase title={'Today Bills'} style={{
+                    fontSize: verticalScale(20),
+                }} />
+                <TextBase title={'Xem tất cả'}
+                    onPress={() => {
+                        console.log('sê moẻ');
+                        
+                    }}
+                    style={{
+                    fontSize: verticalScale(18),
+                    // fontStyle: 'italic',
+                    borderBottomWidth:1,
+                    color: '#A8A8A8'
+                }}/>
+            </View>
+            <FlatList
+                data={bills}
+                keyExtractor={(item:any)=>`item-${item.id}`}
+                renderItem={renderBills}
+                // isRefresh={isRefresh}
+            >
+            </FlatList>
         </>
     }
     return (
@@ -91,7 +167,7 @@ const HomeScreen = (props: Props) => {
             <View style={styles.header}>
                 <TouchableOpacity onPress={() => onPressMenu()}
                     style={styles.menu}>
-                    <FontAwesomeIcon icon={faHouse} size={verticalScale(30)} />
+                    <FontAwesomeIcon icon={faHouse} size={verticalScale(30)}/>
                 </TouchableOpacity>
                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                     <Image
@@ -141,7 +217,7 @@ const styles = StyleSheet.create({
     },
     dash: {
         width: verticalScale(150),
-        height: verticalScale(150),
+        height: verticalScale(120),
         margin: verticalScale(16),
         borderRadius: verticalScale(16),
         padding: verticalScale(16),
@@ -152,11 +228,12 @@ const styles = StyleSheet.create({
         },
         shadowOpacity: 0.32,
         shadowRadius: 5.46,
-
         elevation: 9,
     },
     rowDash: {
-        flexDirection: 'row'
+        flexDirection: 'row',
+        alignItems:'center',
+        justifyContent:'space-between'
     },
     text: {
         color: '#3E2D2D',
@@ -172,6 +249,33 @@ const styles = StyleSheet.create({
         marginHorizontal: verticalScale(16),
         flex: 1,
         // borderWidth: 1
+    },
+    billsItem: {
+        // borderWidth: 1,
+        marginHorizontal: verticalScale(16),
+        marginVertical: verticalScale(8),
+        // height: verticalScale(200),
+        borderRadius: verticalScale(10),
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 2,
+            height: 4,
+        },
+        shadowOpacity: 0.32,
+        shadowRadius: 5.46,
+        elevation: 8,
+        backgroundColor: '#F2CEFE',
+        padding: verticalScale(16),
+        overflow:'hidden'
+    },
+    itemLable: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'flex-start',
+        marginVertical:verticalScale(2)
+    },
+    itemLableIcon: {
+        marginRight:verticalScale(8)
     }
 })
 // ... other code from the previous section

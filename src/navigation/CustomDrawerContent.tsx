@@ -20,10 +20,13 @@ import {
 import { verticalScale } from '../components/Scales';
 import TextBase from '../components/TextBase';
 import { images } from '../constants/images';
+import { useAppDispatch } from '../stores';
+import * as AuthActions from '../stores/Auth/Actions';
 import NavigationService from './NavigationService';
 import { routes } from './Routes';
 
 const CustomSidebarMenu = () => {
+    const dispatch = useAppDispatch();
     return (
         <SafeAreaView style={styles.container}>
             {/*Top Large Image */}
@@ -66,6 +69,12 @@ const CustomSidebarMenu = () => {
                 <DrawerItem
                     label="Customers"
                     onPress={() => { }}
+                    style={styles.dashboard}
+                    labelStyle={styles.lableStyle}
+                />
+                <DrawerItem
+                    label="Log Out"
+                    onPress={() => { dispatch(AuthActions.logoutCompleted()) }}
                     style={styles.dashboard}
                     labelStyle={styles.lableStyle}
                 />
